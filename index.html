@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>
+      websocketのテスト
+    </title>
+    <script>
+      var ws = new WebSocket("ws://localhost:8888/");
+      ws.onopen = function(){
+        ws.send("hello, world");
+      };
+      ws.onmessage = function(e){
+        document.getElementById("hoge").innerHTML = e.data;
+      };
+    </script>
+  </head>
+  <body>
+    <h1>websocketのテスト</h1>
+    <div id='hoge'>
+    </div>
+  </body>
+</body>
+    
