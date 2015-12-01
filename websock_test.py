@@ -9,8 +9,8 @@ class MainHandler(tornado.web.RequestHandler):
 
 class SendWebSocket(tornado.websocket.WebSocketHandler):
 
-  num = 0
-  conn = 0
+  num = 0 #インクリメントする数字
+  conn = 0 #接続中のホスト数
 
   @classmethod
   def update_num(cls):
@@ -32,29 +32,29 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
     return True
 
   def open(self):
-    self.callback = PeriodicCallback(self._send_message, 400)
-    self.increment_callback = PeriodicCallback(self.update_num,400)
-    self.inclement_conn()
+    self.callback = PeriodicCallback(self._send_message, 400)#メッセージをクライアントに送るコールバック
     self.callback.start()
+
+    self.increment_callback = PeriodicCallback(self.update_num,400)#値をインクリメントするコールバック
+    self.inclement_conn()
     if self.get_conn() == 1 :
-      self.increment_callback.start()
-    self.update_num()
+      self.increment_callback.start()#接続ホスト数が1になった時インクリメントをスタートする
+
     print('WebSocket opendやで')
 
   def on_message(self, message):
     print(message)
 
-  @classmethod
-  def get_num(cls):
-    return cls.num
-
   def _send_message(self):
-    self.write_message(str(self.num) + ' 接続中のホスト数=' + str(self.get_conn()))
+    self.write_message(str(self.num) + ' 接続中のホスト数=' + str(self.conn))
 
   def on_close(self):
+    self.callback.stop()
+
     self.decrement_conn()
     if self.get_conn() == 0:
-      self.callback.stop()
+      self.increment_callback.stop()#接続ホストが0になったらインクリメントをストップ
+
     print('WebSocket closed')
 
 app = tornado.web.Application([
