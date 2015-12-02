@@ -1,9 +1,23 @@
 <meta charset='utf-8'>
 <title>jsay</title>
 <script>
-  var ws = new WebSocket("ws://"+location.host+"/websocket")
+  var ws = new WebSocket("ws://"+location.host+"/websocket");
   ws.onopen = function(){
     ws.send('ほげ');
   }
+  function push(){
+    message = document.getElementById('inputarea').value;
+    ws.send(message);
+    document.getElementById('inputarea').value = '';
+  }
+  document.onkeydown = function(e){
+    if(e.keyCode == 13){
+      push();
+    }
+  }
 </script>
+<h1>
 jsay テスト
+</h1>
+<input type='text' id='inputarea'>
+<input type='button' onClick='push()'>

@@ -1,3 +1,5 @@
+#-*-coding:utf-8-*-
+import os
 import tornado.web
 import tornado.websocket
 from tornado.ioloop import PeriodicCallback
@@ -16,6 +18,9 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
         print('closed')
 
     def on_message(self, message):
+        #TODO:かなりひどいセキュリティホールがある
+        command = 'jsay "' + message.encode('utf-8') + '"'
+        os.system(command)
         print(message)
 
 app = tornado.web.Application([
