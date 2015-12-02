@@ -1,0 +1,9 @@
+<meta charset='utf-8'>
+<title>jsay</title>
+<script>
+  var ws = new WebSocket("ws://"+location.host+"/websocket")
+  ws.onopen = function(){
+    ws.send('ほげ');
+  }
+</script>
+jsay テスト
